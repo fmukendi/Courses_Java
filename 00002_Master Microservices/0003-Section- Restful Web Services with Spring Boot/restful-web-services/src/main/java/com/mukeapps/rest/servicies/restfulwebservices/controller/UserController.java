@@ -1,22 +1,26 @@
 package com.mukeapps.rest.servicies.restfulwebservices.controller;
 
+import java.net.URI;
+import java.util.List;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
+
+import javax.validation.Valid;
+
 import com.mukeapps.rest.servicies.restfulwebservices.Exception.UserNotFoundException;
 import com.mukeapps.rest.servicies.restfulwebservices.model.User;
 import com.mukeapps.rest.servicies.restfulwebservices.service.UserDaoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.server.mvc.ControllerLinkBuilder;
+import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import javax.validation.Valid;
-import java.net.URI;
-import java.util.List;
-import static org.springframework.hateoas.server.mvc.ControllerLinkBuilder.*;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 
 public class UserController {
 	/*
@@ -60,7 +64,7 @@ public class UserController {
         }
         //"all-users", SERVER_PATH + "/users"
         // retrieveAllUsers
-        Resource<User> resource = new Resource<User>(user);
+        Resource<User> resource = new Resource<>(user);
         ControllerLinkBuilder linkto =
                 linkTo(methodOn(this.getClass()).retrieveAllUsers());
 
