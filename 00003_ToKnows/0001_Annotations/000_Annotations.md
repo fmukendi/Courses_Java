@@ -1,6 +1,7 @@
 Annotations
 -----
 
+* (0) @Bean
 
 * (1) @SpringBootApplication
 ```
@@ -43,3 +44,20 @@ public class HelloWorldController {
         return new HelloWorldBean("HelloWorld");
     }
 ```
+
+* (4) @GetMapping , @PostMapping
+
+
+* (5) @RequestBody 
+
+* (6) @PathVariable
+
+* (7) @Autowired
+
+* (8) @Override
+
+* (9) @Component
+
+* (10) @Valid
+
+* (11) @ControllerAdvice
