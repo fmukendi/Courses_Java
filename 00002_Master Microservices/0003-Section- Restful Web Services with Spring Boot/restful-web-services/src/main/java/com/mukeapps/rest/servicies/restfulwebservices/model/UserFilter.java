@@ -3,25 +3,16 @@ package com.mukeapps.rest.servicies.restfulwebservices.model;
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 import java.util.Date;
-import java.util.List;
 
-@ApiModel(description = "All details about the user")
 @JsonIgnoreProperties(value ={"password"} )
-@Entity
-public class User {
+@JsonFilter("filter_1")
+public class UserFilter {
 
-    @Id
-    @GeneratedValue
     private Integer id;
 
     @Size(min=2 , message="Name should have at least 2 characters")
@@ -35,15 +26,12 @@ public class User {
     @JsonIgnore
     private String password;
 
-    @OneToMany(mappedBy = "user")
-    private List<Post> postList;
 
-
-    protected User() {
+    protected UserFilter() {
 
     }
 
-    public User(Integer id, String name, String password,  Date birthDate) {
+    public UserFilter(Integer id, String name, String password, Date birthDate) {
         super();
         this.id = id;
         this.name = name;
@@ -79,14 +67,6 @@ public class User {
         this.password = password;
     }
 
-    public List<Post> getPostList() {
-        return postList;
-    }
-
-    public void setPostList(List<Post> postList) {
-        this.postList = postList;
-    }
-
     @Override
     public String toString() {
         return "User{" +
@@ -94,7 +74,6 @@ public class User {
                 ", name='" + name + '\'' +
                 ", birthDate=" + birthDate +
                 ", password='" + password + '\'' +
-                ", postList=" + postList +
                 '}';
     }
 

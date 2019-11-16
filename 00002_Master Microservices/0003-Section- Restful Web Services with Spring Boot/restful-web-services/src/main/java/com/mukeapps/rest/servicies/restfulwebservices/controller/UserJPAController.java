@@ -1,28 +1,26 @@
 package com.mukeapps.rest.servicies.restfulwebservices.controller;
 
-import java.net.URI;
-import java.util.List;
-
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
-
-import javax.validation.Valid;
-
-import com.fasterxml.jackson.databind.ser.FilterProvider;
-import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.mukeapps.rest.servicies.restfulwebservices.Exception.UserNotFoundException;
 import com.mukeapps.rest.servicies.restfulwebservices.model.User;
+import com.mukeapps.rest.servicies.restfulwebservices.repository.UserRepository;
 import com.mukeapps.rest.servicies.restfulwebservices.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
+import java.net.URI;
+import java.util.List;
+import java.util.Optional;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+
 @RestController
-public class UserController {
+public class UserJPAController {
 	/*
 	 HATEOAS (Hypermedia as the Engine of Application State) is a constraint of
 	 the REST application architecture. A hypermedia-driven site provides information
@@ -30,24 +28,31 @@ public class UserController {
 	 */
 
     @Autowired
-    private UserService service;
+    private UserRepository userRepository;
+
     // GET /users
     // RetrieveAllUsers
-    @GetMapping("/users")
+    @GetMapping("/jpa/users")
     public List<User> retrieveAllUsers(){
-        return service.findAll();
+        return userRepository.findAll();
     }
 
-    //Get /users/{id}
+    //Get /jpa/users/{id}
     // RetrieveUser(int id)
-    @GetMapping("/usersSimple/{id}")
+    @GetMapping("/jpa/usersSimple/{id}")
     public User retrieveUserSimple(@PathVariable int id) {
-        return service.findOne(id);
+        Optional<User> optional  = userRepository.findById(id);
+        if(!optional.isPresent()) {
+            throw new UserNotFoundException("id-"+id);
+        }
+
+        return optional.get();
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/jpa/users/{id}")
     public User retrieveUser(@PathVariable int id) {
-        User user = service.findOne(id);
+        Optional<User> optional  = userRepository.findById(id);
+        User user = optional.get();
         if(user == null) {
             throw new UserNotFoundException("id-"+id);
         }
@@ -56,9 +61,10 @@ public class UserController {
     }
 
     // HATEOS
-    @GetMapping("/usershateos/{id}")
+    @GetMapping("/jpa/usershateos/{id}")
     public Resource<User> retrieveUserHateos(@PathVariable int id) {
-        User user = service.findOne(id);
+        Optional<User> optional  = userRepository.findById(id);
+        User user = optional.get();
         if(user == null) {
             throw new UserNotFoundException("id-"+id);
         }
@@ -73,31 +79,29 @@ public class UserController {
         return resource;
     }
 
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/jpa/users/{id}")
     public void DeleterUser(@PathVariable int id) {
-        User user = service.deleteById(id);
-        if(user == null) {
-            throw new UserNotFoundException("id-"+id);
-        }
+        Integer intObj = new Integer(id);
+        userRepository.deleteById(intObj);
     }
 
     //Created
     // input -details of user
     // output- CREATED & Return the created URI
     //Response of 200 (completed)
-    @PostMapping("/usersSimple")
+    @PostMapping("/jpa/usersSimple")
     public void createUserSimple(@RequestBody User user) {
-        User savedUser = service.save(user);
+        User savedUser = userRepository.save(user);
     }
 
     //Created
     // input -details of user
     // output- CREATED & Return the created URI
     //Response of 201 (created)
-    @PostMapping("/usersComplex")
+    @PostMapping("/jpa/usersComplex")
     public ResponseEntity<Object> createUserComplex(@RequestBody User user)
     {
-        User savedUser = service.save(user);
+        User savedUser = userRepository.save(user);
         //CREATED
         // /user/{id}  savedUser.getId
         URI location = ServletUriComponentsBuilder
@@ -110,10 +114,10 @@ public class UserController {
     }
 
     // Validation
-    @PostMapping("/users")
+    @PostMapping("/jpa/users")
     public ResponseEntity<Object> createUser(@Valid @RequestBody User user)
     {
-        User savedUser = service.save(user);
+        User savedUser = userRepository.save(user);
         //CREATED
         // /user/{id}  savedUser.getId
         URI location = ServletUriComponentsBuilder
@@ -124,5 +128,7 @@ public class UserController {
 
         return ResponseEntity.created(location).build();
     }
+
+
 
 }
