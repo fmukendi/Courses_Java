@@ -7,6 +7,9 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 
 import javax.validation.Valid;
 
+import com.fasterxml.jackson.databind.ser.FilterProvider;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.mukeapps.rest.servicies.restfulwebservices.Exception.UserNotFoundException;
 import com.mukeapps.rest.servicies.restfulwebservices.model.User;
 import com.mukeapps.rest.servicies.restfulwebservices.service.UserDaoService;
@@ -14,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -32,6 +36,21 @@ public class UserController {
     @GetMapping("/users")
     public List<User> retrieveAllUsers(){
         return service.findAll();
+    }
+
+    @GetMapping("/users/dynamic-filtering")
+    public MappingJacksonValue retrieveUsersDynamic() {
+        List<User> userList = service.findAll();
+
+        SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.
+                                           filterOutAllExcept("birthDate","name");
+
+        FilterProvider filters = new SimpleFilterProvider().addFilter("filter_1", filter);
+
+        MappingJacksonValue mapping = new MappingJacksonValue(userList);
+        mapping.setFilters(filters);
+
+        return mapping;
     }
 
     //Get /users/{id}

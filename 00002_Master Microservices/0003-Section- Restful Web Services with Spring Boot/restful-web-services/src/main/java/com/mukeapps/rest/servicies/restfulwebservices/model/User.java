@@ -1,12 +1,16 @@
 package com.mukeapps.rest.servicies.restfulwebservices.model;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 import java.util.Date;
 
-
+@JsonIgnoreProperties(value ={"password"} )
+@JsonFilter("filter_1")
 public class User {
 
     private Integer id;
@@ -19,17 +23,20 @@ public class User {
     @ApiModelProperty(notes="Birth date should be in the past")
     private Date birthDate;
 
+    @JsonIgnore
+    private String password;
 
 
     protected User() {
 
     }
 
-    public User(Integer id, String name, Date birthDate) {
+    public User(Integer id, String name, String password,  Date birthDate) {
         super();
         this.id = id;
         this.name = name;
         this.birthDate = birthDate;
+        this.password = password;
     }
 
 
@@ -51,11 +58,24 @@ public class User {
     public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
     }
-    @Override
-    public String toString() {
-        return "User [id=" + id + ", name=" + name + ", birthDate=" + birthDate + "]";
+
+    public String getPassword() {
+        return password;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", birthDate=" + birthDate +
+                ", password='" + password + '\'' +
+                '}';
+    }
 
 
 }
