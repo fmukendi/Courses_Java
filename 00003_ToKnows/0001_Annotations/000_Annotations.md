@@ -3,8 +3,9 @@ Annotations
 
 * (0) ``` @Bean  ```
 
-* (1) ``` @SpringBootApplication  ```
+* (1) ``` @SpringBootApplication  @EnableConfigServer```
 ```java
+@EnableConfigServer
 @SpringBootApplication
 public class restfulWebServicesApplication {
 
