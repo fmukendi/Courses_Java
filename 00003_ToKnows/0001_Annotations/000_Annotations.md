@@ -249,7 +249,7 @@ public class UserController {
 
 ```
 
-* (14) ```@ApiModel @ApiModelProperty @Entity  @Id   @GeneratedValue    ```   
+* (14) ```@ApiModel @ApiModelProperty @Entity  @Id   @GeneratedValue   @Column ```   
 ```java 
 @ApiModel(description = "All details about the user")
 @JsonIgnoreProperties(value ={"password"} )
@@ -271,6 +271,12 @@ public class User {
     @JsonIgnore
     private String password;
 
+    @Column(name = "currency_from")
+    private  String from;
+
+    @Column(name = "currency_to")
+    private  String to;
+
 
     protected User() {
 
@@ -278,15 +284,16 @@ public class User {
 }
 ```
 
-* (14) ```@Repository```  
+* (15) ```@Repository```  
 ```java
 @Repository
-public interface UserRepository  extends JpaRepository<User, Integer> {
+public interface ExchangeValueRepository extends JpaRepository<ExchangeValue, Long> {
 
+   ExchangeValue findByFromAndTo(String from, String to); // JPA is capable to implement this method on his own !!!
 }
 ```
 
-* (14) ```@ManyToOne    @OneToMany```  
+* (16) ```@ManyToOne    @OneToMany```  
 ```java
 
 @ApiModel(description = "All details about the user")
