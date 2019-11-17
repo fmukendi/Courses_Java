@@ -52,17 +52,106 @@ public class HelloWorldController {
 
 * (6) ``` @PathVariable ```
 
-* (7) ``` @Autowired ```
+* (7) ``` @Autowired ```  see 12
 
-* (8) ``` @Override ```
+* (8) ``` @Override ```   see 12
 
 * (9) ``` @Component ```
+```java
+@Component
+public class UserFilterService {
+    private static List<UserFilter> UserFilters = new ArrayList<>();
+    private static int UserFiltersCount = 3;
+    static {
+        UserFilters.add(new UserFilter(1, "Adam", "pass1", new Date()));
+        UserFilters.add(new UserFilter(2, "Eve", "pass2", new Date()));
+        UserFilters.add(new UserFilter(3, "Jack", "pass3", new Date()));
+    }
+
+    public List<UserFilter> findAll() {
+        return UserFilters;
+    }
+    public UserFilter save(UserFilter UserFilter) {
+        if(UserFilter.getId() == null) {
+            UserFilter.setId(++UserFiltersCount);
+        }
+        UserFilters.add(UserFilter);
+
+        return UserFilter;
+    }
+}
+```
 
 * (10) ``` @Valid ```
 
 * (11) ``` @ControllerAdvice ```
 
 * (12) ``` @Configuration ```
+
+* (12-1) ``` @ConfigurationProperties ```
+```java 
+@Configuration
+@ConfigurationProperties("limits-service")
+public class AppConfiguration {
+    private int minimum;
+    private int maximum;
+
+    public int getMinimum() {
+        return minimum;
+    }
+
+    public void setMinimum(int minimum) {
+        this.minimum = minimum;
+    }
+
+    public int getMaximum() {
+        return maximum;
+    }
+
+    public void setMaximum(int maximum) {
+        this.maximum = maximum;
+    }
+
+    @Override
+    public String toString() {
+        return "LimitsConfiguration{" +
+                "maximum=" + maximum +
+                ", minimum=" + minimum +
+                '}';
+    }
+}
+```
+```yml
+spring.application.name=limits-service
+
+limits-service.minimum=99
+limits-service.maximum=9999
+
+```
+
+```java
+@RestController
+public class LimitsConfigurationController {
+
+    @Autowired
+    private AppConfiguration configuration;
+
+    @GetMapping("/limits")
+    public LimitsConfiguration retrieveLimintsFromConfigurations(){
+
+        return  new LimitsConfiguration(configuration.getMaximum(), configuration.getMinimum());
+    }
+
+    @GetMapping("/limitsold")
+    public LimitsConfiguration retrieveLimintsFromConfigurationsOld(){
+
+        return  new LimitsConfiguration(1000, 1);
+    }
+    
+    
+}
+
+```
 
 * (13) ``` @EnableSwagger2 ```
 
