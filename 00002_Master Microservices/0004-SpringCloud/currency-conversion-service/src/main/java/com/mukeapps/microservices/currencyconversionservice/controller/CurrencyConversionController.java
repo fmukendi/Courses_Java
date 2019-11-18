@@ -4,6 +4,8 @@ package com.mukeapps.microservices.currencyconversionservice.controller;
 import com.mukeapps.microservices.currencyconversionservice.client.CurrencyExchangeServiceProxy;
 import com.mukeapps.microservices.currencyconversionservice.mode.CurrencyConversionBean;
 import com.mukeapps.microservices.currencyconversionservice.mode.ExchangeValue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +20,8 @@ import java.util.Map;
 @RestController
 public class CurrencyConversionController {
 
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     private CurrencyExchangeServiceProxy currencyExchangeServiceProxy;
 
@@ -29,6 +33,7 @@ public class CurrencyConversionController {
     ) {
 
         ExchangeValue response = currencyExchangeServiceProxy.retrieveExchangeValue(from, to);
+        logger.info("{}", response);
         return new CurrencyConversionBean(response.getId(), from, to, response.getconversionMultiple(),
                 quantity, quantity.multiply(response.getconversionMultiple()), response.getPort());
     }
