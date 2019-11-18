@@ -3,7 +3,7 @@ Annotations
 
 * (0) ``` @Bean  ```
 
-* (1) ``` @SpringBootApplication  @EnableConfigServer```
+* (1) ``` @SpringBootApplication  @EnableConfigServer @EnableFeignClients @FeignClient```
 ```java
 @EnableConfigServer
 @SpringBootApplication
@@ -13,6 +13,72 @@ public class restfulWebServicesApplication {
         SpringApplication.run(restfulWebServicesApplication.class, args);
     }
 }
+
+```
+
+```java
+
+@SpringBootApplication
+@EnableFeignClients("com.mukeapps.microservices.currencyconversionservice")
+public class CurrencyConversionServiceApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(CurrencyConversionServiceApplication.class, args);
+	}
+
+}
+
+@FeignClient(name ="currency-exchange-service", url = "http://localhost:8000")
+public interface CurrencyExchangeServiceProxy {
+
+    @GetMapping("/currency-exchange/from/{from}/to/{to}")
+    public ExchangeValue retrieveExchangeValue(@PathVariable("from") String from, @PathVariable("to") String to);
+}
+
+@RestController
+public class CurrencyConversionController {
+
+    @Autowired
+    private CurrencyExchangeServiceProxy currencyExchangeServiceProxy;
+
+    @GetMapping("/currency-converter/from/{from}/to/{to}/quantity/{quantity}")
+    public CurrencyConversionBean convertCurrency(
+            @PathVariable String from,
+            @PathVariable String to,
+            @PathVariable BigDecimal quantity
+    ) {
+
+        ExchangeValue response = currencyExchangeServiceProxy.retrieveExchangeValue(from, to);
+        return new CurrencyConversionBean(response.getId(), from, to, response.getconversionMultiple(),
+                quantity, quantity.multiply(response.getconversionMultiple()), response.getPort());
+    }
+
+    @GetMapping("/currency-converter-old/from/{from}/to/{to}/quantity/{quantity}")
+    public CurrencyConversionBean convertCurrencyOld(
+            @PathVariable String from,
+            @PathVariable String to,
+            @PathVariable BigDecimal quantity
+    ) {
+
+        Map<String, String> uriVariables = new HashMap<>();
+        uriVariables.put("from", from);
+        uriVariables.put("to", to);
+
+        ResponseEntity<CurrencyConversionBean> responseEntity = new RestTemplate().getForEntity(
+                "http://localhost:8000/currency-exchange/from/USD/to/INR",
+                CurrencyConversionBean.class,
+                uriVariables
+        );
+
+        CurrencyConversionBean response = responseEntity.getBody();
+
+//        return new CurrencyConversionBean(1L, from, to, BigDecimal.ONE, quantity, quantity, 8100);
+        return new CurrencyConversionBean(response.getId(), from, to, response.getConversionMultiple(),
+                quantity, quantity.multiply(response.getConversionMultiple()), response.getPort());
+    }
+}
+
+
 
 ```
 

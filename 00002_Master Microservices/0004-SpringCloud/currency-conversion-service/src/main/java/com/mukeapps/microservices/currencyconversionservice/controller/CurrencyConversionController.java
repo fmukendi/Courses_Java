@@ -1,7 +1,10 @@
 package com.mukeapps.microservices.currencyconversionservice.controller;
 
 
+import com.mukeapps.microservices.currencyconversionservice.client.CurrencyExchangeServiceProxy;
 import com.mukeapps.microservices.currencyconversionservice.mode.CurrencyConversionBean;
+import com.mukeapps.microservices.currencyconversionservice.mode.ExchangeValue;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,8 +18,23 @@ import java.util.Map;
 @RestController
 public class CurrencyConversionController {
 
+    @Autowired
+    private CurrencyExchangeServiceProxy currencyExchangeServiceProxy;
+
     @GetMapping("/currency-converter/from/{from}/to/{to}/quantity/{quantity}")
     public CurrencyConversionBean convertCurrency(
+            @PathVariable String from,
+            @PathVariable String to,
+            @PathVariable BigDecimal quantity
+    ) {
+
+        ExchangeValue response = currencyExchangeServiceProxy.retrieveExchangeValue(from, to);
+        return new CurrencyConversionBean(response.getId(), from, to, response.getconversionMultiple(),
+                quantity, quantity.multiply(response.getconversionMultiple()), response.getPort());
+    }
+
+    @GetMapping("/currency-converter-old/from/{from}/to/{to}/quantity/{quantity}")
+    public CurrencyConversionBean convertCurrencyOld(
             @PathVariable String from,
             @PathVariable String to,
             @PathVariable BigDecimal quantity
