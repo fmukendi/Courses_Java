@@ -82,6 +82,42 @@ public class CurrencyConversionController {
 
 ```
 
+* (1-1) ```@RibbonClient```
+```java
+//@FeignClient(name ="currency-exchange-service", url = "http://localhost:8000")
+@FeignClient(name ="currency-exchange-service")
+@RibbonClient(name ="currency-exchange-service" )
+public interface CurrencyExchangeServiceProxy {
+
+    @GetMapping("/currency-exchange/from/{from}/to/{to}")
+    public ExchangeValue retrieveExchangeValue(@PathVariable("from") String from, @PathVariable("to") String to);
+}
+```
+
+```yml
+spring.application.name=currency-conversion-service
+server.port=8100
+currency-exchange-service.ribbon.listOfServers=http://localhost:8000,http://localhost:8001
+```
+
+```xml
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-config</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-feign</artifactId>
+                <version>1.4.7.RELEASE</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-ribbon</artifactId>
+                <version>1.4.7.RELEASE</version>
+            </dependency>
+```
+
 * (2) ``` @RestController  ```
 
 ```java
