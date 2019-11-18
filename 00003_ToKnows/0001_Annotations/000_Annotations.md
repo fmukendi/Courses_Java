@@ -118,7 +118,7 @@ currency-exchange-service.ribbon.listOfServers=http://localhost:8000,http://loca
             </dependency>
 ```
 
-* (1-2) ```@EnableEurekaServer```
+* (1-2) ```@EnableEurekaServer  @EnableDiscoveryClient```
 ```java
 @SpringBootApplication
 @EnableEurekaServer
@@ -137,6 +137,26 @@ server.port=8761
 eureka.client.register-with-eureka=false
 eureka.client-fetch-registry=false
 
+```
+
+```java
+@SpringBootApplication
+@EnableFeignClients("com.mukeapps.microservices.currencyconversionservice")
+@EnableDiscoveryClient
+public class CurrencyConversionServiceApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(CurrencyConversionServiceApplication.class, args);
+	}
+
+}
+```
+
+```yml
+spring.application.name=currency-conversion-service
+server.port=8100
+eureka.client.service-url.default-zone=http://localhost:8761/eureka
+currency-exchange-service.ribbon.listOfServers=http://localhost:8000,http://localhost:8001
 ```
 
 * (2) ``` @RestController  ```
