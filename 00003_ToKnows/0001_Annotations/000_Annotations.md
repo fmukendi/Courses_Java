@@ -159,6 +159,67 @@ eureka.client.service-url.default-zone=http://localhost:8761/eureka
 currency-exchange-service.ribbon.listOfServers=http://localhost:8000,http://localhost:8001
 ```
 
+
+* (1-3) ```@EnableZuulProxy EnableDiscoveryClient ```
+```java
+@EnableZuulProxy
+@EnableDiscoveryClient
+@SpringBootApplication
+public class NetflixZuulApiGatewayServerApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(NetflixZuulApiGatewayServerApplication.class, args);
+	}
+}
+
+```java
+@Component
+public class ZuulLoggingFilter extends ZuulFilter {
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    @Override
+    public String filterType() {
+        return "pre";
+    }
+
+    @Override
+    public int filterOrder() {
+        return 1;
+    }
+
+    @Override
+    public boolean shouldFilter() {
+        return true;
+    }
+
+    @Override
+    public Object run() throws ZuulException {
+
+        HttpServletRequest request = RequestContext.getCurrentContext().getRequest();
+        logger.info("request -> {} request uri -> {}", request, request.getRequestURI());
+
+        return null;
+    }
+}
+
+//@FeignClient(name ="currency-exchange-service", url = "http://localhost:8000")
+//@FeignClient(name ="currency-exchange-service")
+@FeignClient(name = "netflix-zuul-api-gateway-server")
+@RibbonClient(name ="currency-exchange-service" )
+public interface CurrencyExchangeServiceProxy {
+
+//    @GetMapping("/currency-exchange/from/{from}/to/{to}")
+    @GetMapping("/currency-exchange-service/currency-exchange/from/{from}/to/{to}")
+    public ExchangeValue retrieveExchangeValue(@PathVariable("from") String from, @PathVariable("to") String to);
+}
+
+
+```yml
+spring.application.name=netflix-zuul-api-gateway-server
+server.port=8765
+eureka.client.service-url.default-zone=http://localhost:8761/eureka
+```
+
 * (2) ``` @RestController  ```
 
 ```java
