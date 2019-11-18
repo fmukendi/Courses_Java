@@ -18,18 +18,18 @@ public class ExchangeValue {
     @Column(name = "currency_to")
     private  String to;
 
-    private BigDecimal convertionMultiple;
+    private BigDecimal conversionMultiple;
 
     private int port;
 
     public ExchangeValue() {
     }
 
-    public ExchangeValue(Long id, String from, String to, BigDecimal convertionMultiple) {
+    public ExchangeValue(Long id, String from, String to, BigDecimal conversionMultiple) {
         this.id = id;
         this.from = from;
         this.to = to;
-        this.convertionMultiple = convertionMultiple;
+        this.conversionMultiple = conversionMultiple;
     }
 
     public int getPort() {
@@ -64,12 +64,12 @@ public class ExchangeValue {
         this.to = to;
     }
 
-    public BigDecimal getConvertionMultiple() {
-        return convertionMultiple;
+    public BigDecimal getconversionMultiple() {
+        return conversionMultiple;
     }
 
-    public void setConvertionMultiple(BigDecimal convertionMultiple) {
-        this.convertionMultiple = convertionMultiple;
+    public void setconversionMultiple(BigDecimal conversionMultiple) {
+        this.conversionMultiple = conversionMultiple;
     }
 
     @Override
@@ -78,7 +78,7 @@ public class ExchangeValue {
                 "id=" + id +
                 ", from='" + from + '\'' +
                 ", to='" + to + '\'' +
-                ", convertionMultiple=" + convertionMultiple +
+                ", conversionMultiple=" + conversionMultiple +
                 '}';
     }
 }
