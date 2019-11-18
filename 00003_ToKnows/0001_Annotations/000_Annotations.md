@@ -118,6 +118,27 @@ currency-exchange-service.ribbon.listOfServers=http://localhost:8000,http://loca
             </dependency>
 ```
 
+* (1-2) ```@EnableEurekaServer```
+```java
+@SpringBootApplication
+@EnableEurekaServer
+public class NetflixEurekaNamingServerApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(NetflixEurekaNamingServerApplication.class, args);
+	}
+
+}
+```
+
+```yml
+spring.application.name=netflix-eureka-naming-server
+server.port=8761
+eureka.client.register-with-eureka=false
+eureka.client-fetch-registry=false
+
+```
+
 * (2) ``` @RestController  ```
 
 ```java
