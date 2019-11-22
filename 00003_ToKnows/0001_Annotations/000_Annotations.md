@@ -557,3 +557,5 @@ public class Post {
 }
 
 ```
+
+*(17) ```@EnableHystrix```
