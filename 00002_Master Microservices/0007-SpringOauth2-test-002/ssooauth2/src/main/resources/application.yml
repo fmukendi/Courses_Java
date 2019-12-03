@@ -1,0 +1,22 @@
+
+#server port
+server:
+  port: 9000
+#OAuth2
+security:
+  oauth2:
+    client:
+      clientId: 1e562ea5d5b5a20b0624
+      clientSecret: a4d0be973576bd035d9a91535784e94677244070
+      accessTokenUri: https://github.com/login/oauth/access_token
+      userAuthorizationUri: https://github.com/login/oauth/authorize
+      clientAuthenticationScheme: form
+    resource:
+      userInfoUri: https://api.github.com/user
+      preferTokenInfo: false
+#view resolver
+spring:
+  mvc:
+    view:
+      prefix: /view/
+      suffix: .jsp
