@@ -27,6 +27,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-security:2.1.10.RELEASE'
 	implementation 'org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.1.10.RELEASE'
+	implementation 'org.springframework.security:spring-security-jwt:1.0.9.RELEASE'
 	implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:8.5.14'
 	implementation 'javax.servlet:jstl:1.2'
 

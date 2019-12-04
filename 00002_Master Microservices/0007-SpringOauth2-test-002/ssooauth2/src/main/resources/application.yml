@@ -14,6 +14,8 @@ security:
     resource:
       userInfoUri: https://api.github.com/user
       preferTokenInfo: false
+#      jwk:
+#        key-set-uri: https://github.com/login/oauth/token_keys
 #view resolver
 spring:
   mvc:
