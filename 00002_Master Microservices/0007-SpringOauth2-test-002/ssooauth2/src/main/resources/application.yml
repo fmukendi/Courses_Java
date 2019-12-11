@@ -8,6 +8,8 @@ security:
     client:
       clientId: 1e562ea5d5b5a20b0624
       clientSecret: a4d0be973576bd035d9a91535784e94677244070
+#      clientId: d47f2c93cf17b789156a
+#      clientSecret: be04cbd54d1509ca8b0adffab0ee52586eea9700
       accessTokenUri: https://github.com/login/oauth/access_token
       userAuthorizationUri: https://github.com/login/oauth/authorize
       clientAuthenticationScheme: form
