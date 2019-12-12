@@ -10,6 +10,4 @@ public class OauthSocialLogIn000Application{
 	public static void main(String[] args) {
 		SpringApplication.run(OauthSocialLogIn000Application.class, args);
 	}
-
-
 }
