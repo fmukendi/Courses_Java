@@ -38,7 +38,7 @@ import java.util.List;
 //@RestController
 @EnableOAuth2Client
 @EnableAuthorizationServer
-//@Order(200) // @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
+@Order(200) // @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 public class SsoConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -55,7 +55,7 @@ public class SsoConfig extends WebSecurityConfigurerAdapter {
                     .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/"))
                 .and().logout().logoutSuccessUrl("/").permitAll()
                 .and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                    .and().addFilterBefore(ssoFilter(), BasicAuthenticationFilter.class);;
+                    .and().addFilterBefore(ssoFilter(), BasicAuthenticationFilter.class);
     }
 
     private Filter ssoFilter() {
@@ -108,15 +108,15 @@ public class SsoConfig extends WebSecurityConfigurerAdapter {
         }
     }
 
-//    @Configuration
-//    @EnableResourceServer
-//    protected static class ResourceServerConfiguration
-//            extends ResourceServerConfigurerAdapter {
-//        @Override
-//        public void configure(HttpSecurity http) throws Exception {
-//            http
-//                    .antMatcher("/me")
-//                    .authorizeRequests().anyRequest().authenticated();
-//        }
-//    }
+    @Configuration
+    @EnableResourceServer
+    protected static class ResourceServerConfiguration
+            extends ResourceServerConfigurerAdapter {
+        @Override
+        public void configure(HttpSecurity http) throws Exception {
+                    http
+                    .antMatcher("/me")
+                    .authorizeRequests().anyRequest().authenticated();
+        }
+    }
 }

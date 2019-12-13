@@ -9,15 +9,15 @@ import java.util.Map;
 
 @RestController
 public class UserController {
-    @RequestMapping("/user")
-    public Principal user(Principal principal) {
-        return principal;
-    }
-
-//    @RequestMapping({ "/user", "/me" })
-//    public Map<String, String> user(Principal principal) {
-//        Map<String, String> map = new LinkedHashMap<>();
-//        map.put("name", principal.getName());
-//        return map;
+//    @RequestMapping("/user")
+//    public Principal user(Principal principal) {
+//        return principal;
 //    }
+
+    @RequestMapping({ "/user", "/me" })
+    public Map<String, String> user(Principal principal) {
+        Map<String, String> map = new LinkedHashMap<>();
+        map.put("name", principal.getName());
+        return map;
+    }
 }
