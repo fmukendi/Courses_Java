@@ -28,3 +28,11 @@ export JAVA_HOME=/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/H
  ./gradlew pitest  
 
  ./gradlew clean build 
+
+
+——————————————————
+
+cf login -a https://api.run-np.homedepot.com/      
+
+ cf push -f development.manifest.yml -p build/libs/fast-integration-0.0.1-SNAPSHOT.jar
+
